@@ -1,16 +1,18 @@
 appId: com.opeyemiagbeja.breetdelivery
 name: Login to tracking detail
 ---
+# Login, Home and Tracking Detail keep looping animations running, so the screen never settles.
+# The short settle timeouts stop Maestro waiting out its default after every tap and swipe.
 - launchApp:
     clearState: true
+- extendedWaitUntil:
+    visible: 'Welcome to E-Bikes|Development servers'
+    timeout: 60000
 # A development build opens the Expo launcher first; point it at the local Metro server.
 - runFlow:
     when:
-      notVisible: Welcome to E-Bikes
+      visible: Development servers
     commands:
-      - extendedWaitUntil:
-          visible: Development servers
-          timeout: 30000
       - openLink: exp+breet-delivery-app://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081&__expo_disable_onboarding=1&__expo_disable_fab=1
       - tapOn:
           text: Continue
@@ -22,32 +24,45 @@ name: Login to tracking detail
     visible: Welcome to E-Bikes
     timeout: 60000
 
-- tapOn: Login with Google
+- tapOn:
+    text: Login with Google
+    waitToSettleTimeoutMs: 500
 - assertVisible: Hello good Morning!
 - swipe:
     start: 80%, 35%
     end: 20%, 35%
     duration: 400
-- waitForAnimationToEnd
+    waitToSettleTimeoutMs: 500
+- waitForAnimationToEnd:
+    timeout: 1500
 
-- tapOn: Your Orders
+- tapOn:
+    text: Your Orders
+    waitToSettleTimeoutMs: 500
 - assertVisible: Track Your Package
 - assertVisible: Tracking history
 
-- tapOn: Receipt number
+- tapOn:
+    text: Receipt number
+    waitToSettleTimeoutMs: 500
 - inputText: SCP9374826473
-- tapOn: Track Now
+- tapOn:
+    text: Track Now
+    waitToSettleTimeoutMs: 500
 
 - assertVisible: Tracking Details
 - assertVisible: Receipt number SCP9374826473
 - assertVisible: 2h 40m
-- waitForAnimationToEnd
+- waitForAnimationToEnd:
+    timeout: 1500
 
 - swipe:
     start: 50%, 88%
     end: 50%, 25%
     duration: 500
-- waitForAnimationToEnd
+    waitToSettleTimeoutMs: 500
+- waitForAnimationToEnd:
+    timeout: 1500
 - assertVisible: History
 - assertVisible: 'No receipt : SCP9374826473'
 - assertVisible: Send Form Sukabumi

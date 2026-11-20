@@ -42,6 +42,7 @@ export function LoginScreen({ navigation }: RootStackScreenProps<'Login'>) {
         accessible
         accessibilityRole="image"
         accessibilityLabel="Boxes ready for delivery"
+        renderToHardwareTextureAndroid
       >
         <LoginBoxes width={scale(ILLUSTRATION.width)} height={scale(ILLUSTRATION.height)} />
       </Animated.View>

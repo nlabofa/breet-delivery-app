@@ -9,6 +9,8 @@ A React Native implementation of the "TEST | Delivery App" Figma file for Breet'
 
 ## Screens
 
+<p align="center"><img src="docs/demo.gif" alt="The Maestro flow running on the release build: Login, Home, Track, then Tracking Detail with the sheet swiped up" width="300" /></p>
+
 | Login                                | Home                               | Track                                | Tracking Detail                                          | Swipe up                                                   |
 | ------------------------------------ | ---------------------------------- | ------------------------------------ | -------------------------------------------------------- | ---------------------------------------------------------- |
 | ![Login](docs/screenshots/login.png) | ![Home](docs/screenshots/home.png) | ![Track](docs/screenshots/track.png) | ![Tracking Detail](docs/screenshots/tracking-detail.png) | ![Swipe up](docs/screenshots/tracking-detail-expanded.png) |
@@ -50,6 +52,8 @@ npm test
 ```sh
 maestro test .maestro/main-flow.yaml
 ```
+
+The GIF above is a screen recording of this flow on the release APK, with the pauses between steps cut out. The flow works on a development build too: it connects the Expo launcher to the local Metro server first.
 
 ## Build the APK
 

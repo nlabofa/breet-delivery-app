@@ -58,7 +58,7 @@ function DriftingWave({ drift, distance, style }: DriftingWaveProps) {
   }));
 
   return (
-    <Animated.View style={[styles.wave, style, driftStyle]}>
+    <Animated.View style={[styles.wave, style, driftStyle]} renderToHardwareTextureAndroid>
       <LoginWave width={scale(WAVE.width)} height={scale(WAVE.height)} />
     </Animated.View>
   );
