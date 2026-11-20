@@ -16,7 +16,7 @@ A React Native implementation of the "TEST | Delivery App" Figma file for Breet'
 What the designer's notes asked for, and where it lives:
 
 - **Use Lottie file**: the cyclist on Home plays LottieFiles #59085, "Bikers Like a Ninja". The Figma layer is named after it, so this is the animation the designer picked.
-- **Make the Carousel swipe**: the bike carousel snaps card by card, the next card peeks in faded, and the dots follow the scroll.
+- **Make the Carousel swipe**: the bike carousel snaps card by card, the next card peeks in faded, and the dots follow the scroll. While you swipe, the side cards shrink slightly, the bikes drift against their cards and the active dot stretches; when it settles, it is back on the Figma frame.
 - **Your Orders leads here**: Home → Track.
 - **Track Now leads to map page**: Track → Tracking Detail. Tapping a history row opens the same screen for that receipt.
 - **This swipes Up**: the Tracking Detail sheet drags between the collapsed and expanded frames, with the dimmed backdrop from the design.
@@ -39,6 +39,16 @@ Checks:
 npm run typecheck
 npm run lint
 npm run format:check
+npm test
+```
+
+## Tests
+
+- **Component tests** (Jest with jest-expo and React Native Testing Library) cover the shared pieces the screens are built from: `PillButton` (label, press, haptic), `PageDots` (one dot per page, the right one highlighted), `TrackPackageCard` (typed receipt reaches Track Now and the keyboard search key) and `ShipmentRow` (shows the receipt and passes it on).
+- **End-to-end flow** (Maestro) in `.maestro/main-flow.yaml`: Login → Home → swipe the carousel → Your Orders → type a receipt → Track Now → swipe the sheet up and check the history. With the app installed on a device or emulator:
+
+```sh
+maestro test .maestro/main-flow.yaml
 ```
 
 ## Build the APK
@@ -80,7 +90,7 @@ src/
 - **Fonts are embedded**: Inter, plus Lato 2.0 SemiBold for the "Your Orders" and "Track Now" labels, which is what the design uses there. Both are OFL.
 - **Emoji are images.** The design uses Apple emoji; Android would draw Google's instead, so the three emoji ship as PNGs exported from Figma.
 - **The map is the vector map from the design**, with the route drawn on top. A live map would need an API key and would never look like the design. On open, the route draws from pickup to destination with a light running along its head, then the destination halo pulses. It settles on the exact Figma frame, and with Reduce Motion on it shows that frame straight away.
-- **The bottom sheet is @gorhom/bottom-sheet.** It already solves dragging into an inner scroll view and velocity snapping. The snap points come from the two Figma frames, the backdrop fades in with the drag, and the map shifts up as the sheet opens, which is what the expanded frame shows.
+- **The bottom sheet is @gorhom/bottom-sheet.** It already solves dragging into an inner scroll view and velocity snapping. The snap points come from the two Figma frames, the backdrop fades in with the drag, and the map shifts up as the sheet opens, which is what the expanded frame shows. The history follows the drag too: the timeline line draws down, each row slides in after the one above it, and the current event's badge pulses once the sheet is open.
 - **Strings are copied verbatim**, including "Send Form Sukabumi", "No receipt :" and "2,50 USD".
 - **The three tabs without designs do nothing when tapped**, and "Sign Up" goes to the same place as "Login with Google", since neither has a screen in the file.
 - **Skipped on purpose:** the expanded frame puts a 2px blur on the header behind the dark backdrop. At 50% black it is barely visible, and Android blur is still experimental, so it is left out.
@@ -97,6 +107,6 @@ I used Claude Code as a pair programmer for the implementation, which is why som
 ## With more time
 
 - Real Google sign-in and an API layer behind the mock data.
-- Maestro end-to-end tests for the main flow, and component tests for the primitives.
+- Screen-level tests for navigation, and running the Maestro flow in CI.
 - A proper upload keystore and Play Store build.
 - Dark mode, once there is a design for it.
