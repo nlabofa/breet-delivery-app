@@ -85,6 +85,10 @@ src/
 - **The three tabs without designs do nothing when tapped**, and "Sign Up" goes to the same place as "Login with Google", since neither has a screen in the file.
 - **Skipped on purpose:** the expanded frame puts a 2px blur on the header behind the dark backdrop. At 50% black it is barely visible, and Android blur is still experimental, so it is left out.
 
+## How I built this
+
+I used Claude Code as a pair programmer for the implementation, which is why some commits carry a `Co-Authored-By` line. I chose the stack and architecture, read the values from the Figma file, and worked in phases: each one ended with a review of the diff and on-device screenshots compared against the Figma frames before anything was committed. Every screen was checked against a design overlay on an Android emulator, including a small-screen pass.
+
 ## Credits
 
 - Animation: [Bikers Like a Ninja](https://lottiefiles.com/free-animation/bikers-like-a-ninja-zQwObIGBmM) by Emas Didik Prasetyo, Lottie Simple License.
