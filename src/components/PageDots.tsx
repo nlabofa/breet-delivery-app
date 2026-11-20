@@ -6,6 +6,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { sizes } from '@/theme';
+import { scale } from '@/utils/scale';
 
 export type PageDotsProps = {
   count: number;
@@ -13,9 +14,19 @@ export type PageDotsProps = {
   activeColor: string;
   inactiveColor: string;
   spacing: number;
+  stretch?: SharedValue<number>;
 };
 
-export function PageDots({ count, progress, activeColor, inactiveColor, spacing }: PageDotsProps) {
+const STRETCH_WIDTH = scale(10);
+
+export function PageDots({
+  count,
+  progress,
+  activeColor,
+  inactiveColor,
+  spacing,
+  stretch,
+}: PageDotsProps) {
   return (
     <View style={[styles.row, { gap: spacing - sizes.dot }]} accessibilityRole="none">
       {Array.from({ length: count }, (_, index) => (
@@ -25,24 +36,29 @@ export function PageDots({ count, progress, activeColor, inactiveColor, spacing 
           progress={progress}
           activeColor={activeColor}
           inactiveColor={inactiveColor}
+          stretch={stretch}
         />
       ))}
     </View>
   );
 }
 
-type DotProps = Pick<PageDotsProps, 'progress' | 'activeColor' | 'inactiveColor'> & {
+type DotProps = Pick<PageDotsProps, 'progress' | 'activeColor' | 'inactiveColor' | 'stretch'> & {
   index: number;
 };
 
-function Dot({ index, progress, activeColor, inactiveColor }: DotProps) {
-  const animatedStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(
-      progress.value,
-      [index - 1, index, index + 1],
-      [inactiveColor, activeColor, inactiveColor],
-    ),
-  }));
+function Dot({ index, progress, activeColor, inactiveColor, stretch }: DotProps) {
+  const animatedStyle = useAnimatedStyle(() => {
+    const closeness = 1 - Math.min(Math.abs(progress.get() - index), 1);
+    return {
+      width: sizes.dot + STRETCH_WIDTH * closeness * (stretch ? stretch.get() : 0),
+      backgroundColor: interpolateColor(
+        progress.get(),
+        [index - 1, index, index + 1],
+        [inactiveColor, activeColor, inactiveColor],
+      ),
+    };
+  });
 
   return <Animated.View testID="page-dot" style={[styles.dot, animatedStyle]} />;
 }

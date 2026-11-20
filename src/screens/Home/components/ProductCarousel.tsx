@@ -2,10 +2,14 @@ import { Image } from 'expo-image';
 import { memo, useCallback } from 'react';
 import { StyleSheet, View, type ListRenderItem } from 'react-native';
 import Animated, {
+  cancelAnimation,
   interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
+  useReducedMotion,
   useSharedValue,
+  withDelay,
+  withTiming,
   type SharedValue,
 } from 'react-native-reanimated';
 
@@ -20,20 +24,60 @@ const CARD_GAP = scale(10);
 const SNAP_INTERVAL = CARD_WIDTH + CARD_GAP;
 const IMAGE = { width: scale(199), height: scale(229), left: scale(28), top: scale(18) };
 
+// Depth only shows while a swipe is in progress, so the carousel settles back on the Figma frame.
+const NEIGHBOUR_SCALE = 0.94;
+const PARALLAX_SHIFT = scale(24);
+const SWIPE_IN = { duration: 160 };
+const SWIPE_OUT = { duration: 260 };
+const RELEASE_GRACE = 350;
+
 export type ProductCarouselProps = {
   items: Product[];
 };
 
 export function ProductCarousel({ items }: ProductCarouselProps) {
+  const reduceMotion = useReducedMotion();
   const progress = useSharedValue(0);
+  const swiping = useSharedValue(0);
+  const swipeStartPage = useSharedValue(0);
 
-  const onScroll = useAnimatedScrollHandler((event) => {
-    progress.value = event.contentOffset.x / SNAP_INTERVAL;
+  const onScroll = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      progress.set(event.contentOffset.x / SNAP_INTERVAL);
+    },
+    onBeginDrag: () => {
+      if (reduceMotion) return;
+      swipeStartPage.set(Math.round(progress.get()));
+      cancelAnimation(swiping);
+      swiping.set(withTiming(1, SWIPE_IN));
+    },
+    onEndDrag: () => {
+      if (reduceMotion) return;
+      // Covers a release that snaps without a momentum phase.
+      swiping.set(withDelay(RELEASE_GRACE, withTiming(0, SWIPE_OUT)));
+    },
+    onMomentumBegin: () => {
+      if (reduceMotion) return;
+      cancelAnimation(swiping);
+      swiping.set(withTiming(1, SWIPE_IN));
+    },
+    onMomentumEnd: () => {
+      if (reduceMotion) return;
+      swiping.set(withTiming(0, SWIPE_OUT));
+    },
   });
 
   const renderItem: ListRenderItem<Product> = useCallback(
-    ({ item, index }) => <ProductCard product={item} index={index} progress={progress} />,
-    [progress],
+    ({ item, index }) => (
+      <ProductCard
+        product={item}
+        index={index}
+        progress={progress}
+        swiping={swiping}
+        swipeStartPage={swipeStartPage}
+      />
+    ),
+    [progress, swiping, swipeStartPage],
   );
 
   return (
@@ -66,6 +110,7 @@ export function ProductCarousel({ items }: ProductCarouselProps) {
           activeColor={colors.dot.active}
           inactiveColor={colors.dot.inactive}
           spacing={13}
+          stretch={swiping}
         />
       </View>
     </View>
@@ -80,21 +125,47 @@ type ProductCardProps = {
   product: Product;
   index: number;
   progress: SharedValue<number>;
+  swiping: SharedValue<number>;
+  swipeStartPage: SharedValue<number>;
 };
 
-const ProductCard = memo(function ProductCard({ product, index, progress }: ProductCardProps) {
+const ProductCard = memo(function ProductCard({
+  product,
+  index,
+  progress,
+  swiping,
+  swipeStartPage,
+}: ProductCardProps) {
+  const cardStyle = useAnimatedStyle(() => {
+    const distance = Math.min(Math.abs(progress.get() - index), 1);
+    return {
+      transform: [{ scale: 1 - (1 - NEIGHBOUR_SCALE) * distance * swiping.get() }],
+    };
+  });
+
+  // Only the card under the finger gets parallax: its bike lags behind the swipe.
+  const imageStyle = useAnimatedStyle(() => {
+    if (swipeStartPage.get() !== index) return { transform: [{ translateX: 0 }] };
+    const offset = Math.max(-1, Math.min(progress.get() - index, 1));
+    return {
+      transform: [{ translateX: offset * PARALLAX_SHIFT * swiping.get() }],
+    };
+  });
+
   const fadeStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(progress.value, [index - 1, index, index + 1], [1, 0, 1], 'clamp'),
+    opacity: interpolate(progress.get(), [index - 1, index, index + 1], [1, 0, 1], 'clamp'),
   }));
 
   return (
-    <View style={styles.card}>
-      <Image source={product.image} contentFit="contain" style={styles.image} />
+    <Animated.View style={[styles.card, cardStyle]}>
+      <Animated.View style={[styles.image, imageStyle]}>
+        <Image source={product.image} contentFit="contain" style={styles.fill} />
+      </Animated.View>
       <Animated.View
         pointerEvents="none"
         style={[StyleSheet.absoluteFill, styles.fade, fadeStyle]}
       />
-    </View>
+    </Animated.View>
   );
 });
 
@@ -121,6 +192,10 @@ const styles = StyleSheet.create({
     height: IMAGE.height,
     left: IMAGE.left,
     top: IMAGE.top,
+  },
+  fill: {
+    width: '100%',
+    height: '100%',
   },
   fade: {
     backgroundColor: colors.surface.softFaded,
