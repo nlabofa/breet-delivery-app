@@ -4,7 +4,8 @@ A React Native implementation of the "TEST | Delivery App" Figma file for Breet'
 
 ## Download
 
-- APK: [app-release.apk](https://github.com/nlabofa/breet-delivery-app/releases/download/v1.0.0/app-release.apk) (53 MB, from [Release v1.0.0](https://github.com/nlabofa/breet-delivery-app/releases/tag/v1.0.0))
+- **Download page:** [Release v1.0.0](https://github.com/nlabofa/breet-delivery-app/releases/tag/v1.0.0)
+- **Direct APK:** [app-release.apk](https://github.com/nlabofa/breet-delivery-app/releases/download/v1.0.0/app-release.apk) (53 MB)
 - Android 7.0 or newer, on an ARM phone (every current Android phone)
 - Open the APK on the phone to install it; Android may ask you to allow installs from your browser or file manager first
 
