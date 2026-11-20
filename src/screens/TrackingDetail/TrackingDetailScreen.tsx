@@ -1,33 +1,44 @@
 import { StyleSheet, View } from 'react-native';
+import { useSharedValue } from 'react-native-reanimated';
 
-import { AppText, PillButton, Screen } from '@/components';
+import { Screen } from '@/components';
+import { useDesignInsets } from '@/hooks/useDesignInsets';
 import { type RootStackScreenProps } from '@/navigation/types';
 import { colors, layout } from '@/theme';
+import { scale } from '@/utils/scale';
+
+import { DetailHeader } from './components/DetailHeader';
+import { MapBackground } from './components/MapBackground';
+import { ReceiptPill } from './components/ReceiptPill';
+
+const HEADER_TOP = 40;
+const PILL_TOP = 120;
 
 export function TrackingDetailScreen({
   navigation,
   route,
 }: RootStackScreenProps<'TrackingDetail'>) {
+  const { receipt } = route.params;
+  const { fromTop } = useDesignInsets();
+  const sheetIndex = useSharedValue(0);
+
   return (
-    <Screen background={colors.surface.soft}>
-      <View style={styles.content}>
-        <AppText variant="headerTitle" color={colors.ink.navy}>
-          Tracking Details
-        </AppText>
-        <AppText variant="label" color={colors.ink.receipt}>
-          {route.params.receipt}
-        </AppText>
-        <PillButton label="Back" onPress={() => navigation.goBack()} />
+    <Screen background={colors.surface.soft} edges={[]}>
+      <MapBackground sheetIndex={sheetIndex} />
+      <View style={[styles.overlay, { top: fromTop(HEADER_TOP) }]}>
+        <DetailHeader title="Tracking Details" onBackPress={() => navigation.goBack()} />
+      </View>
+      <View style={[styles.overlay, { top: fromTop(PILL_TOP) }]}>
+        <ReceiptPill value={receipt} />
       </View>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    gap: 24,
-    paddingHorizontal: layout.screenPadding,
+  overlay: {
+    position: 'absolute',
+    left: scale(layout.screenPadding),
+    right: scale(layout.screenPadding),
   },
 });
