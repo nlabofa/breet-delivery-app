@@ -2,14 +2,17 @@ import { StyleSheet, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 
 import { Screen } from '@/components';
+import { eta } from '@/data/trackingDetail';
 import { useDesignInsets } from '@/hooks/useDesignInsets';
 import { type RootStackScreenProps } from '@/navigation/types';
 import { colors, layout } from '@/theme';
 import { scale } from '@/utils/scale';
 
 import { DetailHeader } from './components/DetailHeader';
+import { EtaHeader } from './components/EtaHeader';
 import { MapBackground } from './components/MapBackground';
 import { ReceiptPill } from './components/ReceiptPill';
+import { TrackingSheet } from './components/TrackingSheet';
 
 const HEADER_TOP = 40;
 const PILL_TOP = 120;
@@ -31,6 +34,10 @@ export function TrackingDetailScreen({
       <View style={[styles.overlay, { top: fromTop(PILL_TOP) }]}>
         <ReceiptPill value={receipt} />
       </View>
+      <TrackingSheet
+        animatedIndex={sheetIndex}
+        header={<EtaHeader label={eta.label} value={eta.value} />}
+      />
     </Screen>
   );
 }
