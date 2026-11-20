@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 
 import { Screen } from '@/components';
-import { eta } from '@/data/trackingDetail';
+import { buildSummary, eta, trackingEvents } from '@/data/trackingDetail';
 import { useDesignInsets } from '@/hooks/useDesignInsets';
 import { type RootStackScreenProps } from '@/navigation/types';
 import { colors, layout } from '@/theme';
@@ -10,8 +10,10 @@ import { scale } from '@/utils/scale';
 
 import { DetailHeader } from './components/DetailHeader';
 import { EtaHeader } from './components/EtaHeader';
+import { HistoryTimeline } from './components/HistoryTimeline';
 import { MapBackground } from './components/MapBackground';
 import { ReceiptPill } from './components/ReceiptPill';
+import { SummaryCard } from './components/SummaryCard';
 import { TrackingSheet } from './components/TrackingSheet';
 
 const HEADER_TOP = 40;
@@ -37,7 +39,10 @@ export function TrackingDetailScreen({
       <TrackingSheet
         animatedIndex={sheetIndex}
         header={<EtaHeader label={eta.label} value={eta.value} />}
-      />
+      >
+        <SummaryCard sections={buildSummary(receipt)} />
+        <HistoryTimeline events={trackingEvents} />
+      </TrackingSheet>
     </Screen>
   );
 }
