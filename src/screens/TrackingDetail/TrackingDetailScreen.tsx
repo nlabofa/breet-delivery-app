@@ -41,7 +41,7 @@ export function TrackingDetailScreen({
         header={<EtaHeader label={eta.label} value={eta.value} />}
       >
         <SummaryCard sections={buildSummary(receipt)} />
-        <HistoryTimeline events={trackingEvents} />
+        <HistoryTimeline events={trackingEvents} sheetIndex={sheetIndex} />
       </TrackingSheet>
     </Screen>
   );
