@@ -3,6 +3,8 @@ import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'rea
 
 import { colors, radii, sizes, type TypographyVariant } from '@/theme';
 
+import { scale } from '@/utils/scale';
+
 import { AppText } from './AppText';
 
 export type PillButtonProps = {
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
   },
   leadingOverlay: {
     position: 'absolute',
-    left: 12,
+    left: scale(12),
   },
   label: {
     flex: 1,

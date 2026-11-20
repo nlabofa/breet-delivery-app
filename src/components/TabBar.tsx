@@ -8,11 +8,10 @@ import BookmarkIcon from '@assets/icons/tab-bookmark.svg';
 import HomeIcon from '@assets/icons/tab-home.svg';
 import SendIcon from '@assets/icons/tab-send.svg';
 import SettingsIcon from '@assets/icons/tab-settings.svg';
-import { colors } from '@/theme';
+import { colors, sizes } from '@/theme';
 import { scale } from '@/utils/scale';
 
-const ICON_SIZE = 24;
-const ICON_TOP = 24;
+const ICON_TOP = scale(24);
 const MIN_BOTTOM = 32;
 
 const tabs: Record<string, { Icon: FC<SvgProps>; label: string }> = {
@@ -55,8 +54,8 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
             hitSlop={12}
           >
             <Icon
-              width={ICON_SIZE}
-              height={ICON_SIZE}
+              width={sizes.tabIcon}
+              height={sizes.tabIcon}
               color={focused ? colors.icon.tabActive : colors.icon.tabInactive}
             />
           </Pressable>

@@ -2,7 +2,7 @@ import { type ImageSource } from 'expo-image';
 import { StyleSheet, View } from 'react-native';
 
 import BellIcon from '@assets/icons/bell.svg';
-import { colors } from '@/theme';
+import { colors, sizes } from '@/theme';
 import { scale } from '@/utils/scale';
 
 import { AppText } from './AppText';
@@ -21,7 +21,7 @@ export function HomeHeader({ avatar, greeting, onBellPress = () => {} }: HomeHea
       <View style={styles.row}>
         <Avatar source={avatar} />
         <IconButton
-          icon={<BellIcon width={20} height={22} color={colors.ink.title} />}
+          icon={<BellIcon {...sizes.bell} color={colors.ink.title} />}
           onPress={onBellPress}
           accessibilityLabel="Notifications"
         />

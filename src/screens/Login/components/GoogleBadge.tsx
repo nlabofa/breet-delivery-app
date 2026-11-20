@@ -1,23 +1,20 @@
 import { StyleSheet, View } from 'react-native';
 
 import GoogleIcon from '@assets/icons/google.svg';
-import { colors, radii } from '@/theme';
-
-const SIZE = 32;
-const ICON = 20;
+import { colors, radii, sizes } from '@/theme';
 
 export function GoogleBadge() {
   return (
     <View style={styles.badge}>
-      <GoogleIcon width={ICON} height={ICON} />
+      <GoogleIcon width={sizes.googleIcon} height={sizes.googleIcon} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   badge: {
-    width: SIZE,
-    height: SIZE,
+    width: sizes.googleBadge,
+    height: sizes.googleBadge,
     borderRadius: radii.circle,
     backgroundColor: colors.overlay.googleCircle,
     alignItems: 'center',

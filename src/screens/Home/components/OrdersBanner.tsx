@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 
 import ArrowRight from '@assets/icons/arrow-right.svg';
 import { AppText, PillButton } from '@/components';
-import { colors } from '@/theme';
+import { colors, sizes } from '@/theme';
 import { moderateScale, scale } from '@/utils/scale';
 
 export type OrdersBannerProps = {
@@ -19,7 +19,7 @@ export function OrdersBanner({ onOrdersPress }: OrdersBannerProps) {
         label="Your Orders"
         labelVariant="button"
         labelAlign="start"
-        trailing={<ArrowRight width={19} height={12} color={colors.surface.white} />}
+        trailing={<ArrowRight {...sizes.arrow} color={colors.surface.white} />}
         paddingStart={scale(29)}
         paddingEnd={scale(36)}
         onPress={onOrdersPress}
