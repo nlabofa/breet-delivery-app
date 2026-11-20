@@ -44,7 +44,7 @@ function Dot({ index, progress, activeColor, inactiveColor }: DotProps) {
     ),
   }));
 
-  return <Animated.View style={[styles.dot, animatedStyle]} />;
+  return <Animated.View testID="page-dot" style={[styles.dot, animatedStyle]} />;
 }
 
 const styles = StyleSheet.create({
