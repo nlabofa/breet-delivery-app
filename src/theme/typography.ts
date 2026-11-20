@@ -7,7 +7,7 @@ export const fontFamily = {
   medium: 'Inter-Medium',
   semiBold: 'Inter-SemiBold',
   bold: 'Inter-Bold',
-  button: 'Lato-Bold',
+  button: 'Lato-SemiBold',
 } as const;
 
 type Spec = {
