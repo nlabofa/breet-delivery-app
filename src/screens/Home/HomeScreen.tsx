@@ -1,4 +1,6 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { type ReactNode } from 'react';
+import { ScrollView, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { HomeHeader, Screen } from '@/components';
 import { products } from '@/data/products';
@@ -13,6 +15,9 @@ import { ProductCarousel } from './components/ProductCarousel';
 import { SquadInvite } from './components/SquadInvite';
 
 const HEADER_TOP = 40;
+const ENTER_DELAY = 120;
+const ENTER_STEP = 90;
+const ENTER_DURATION = 450;
 
 export function HomeScreen({ navigation }: HomeStackScreenProps<'Home'>) {
   const { fromTop } = useDesignInsets();
@@ -24,18 +29,38 @@ export function HomeScreen({ navigation }: HomeStackScreenProps<'Home'>) {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingTop: fromTop(HEADER_TOP) }}
       >
-        <View style={styles.header}>
+        <Section order={0} style={styles.header}>
           <HomeHeader avatar={currentUser.avatar} greeting={currentUser.greeting} />
-        </View>
-        <View style={styles.carousel}>
+        </Section>
+        <Section order={1} style={styles.carousel}>
           <ProductCarousel items={products} />
-        </View>
-        <View style={styles.banner}>
+        </Section>
+        <Section order={2} style={styles.banner}>
           <OrdersBanner onOrdersPress={() => navigation.navigate('Track')} />
-        </View>
-        <SquadInvite />
+        </Section>
+        <Section order={3}>
+          <SquadInvite />
+        </Section>
       </ScrollView>
     </Screen>
+  );
+}
+
+type SectionProps = {
+  order: number;
+  style?: StyleProp<ViewStyle>;
+  children: ReactNode;
+};
+
+// Layout entering animations follow the system Reduce Motion setting by default.
+function Section({ order, style, children }: SectionProps) {
+  return (
+    <Animated.View
+      entering={FadeInUp.delay(ENTER_DELAY + order * ENTER_STEP).duration(ENTER_DURATION)}
+      style={style}
+    >
+      {children}
+    </Animated.View>
   );
 }
 

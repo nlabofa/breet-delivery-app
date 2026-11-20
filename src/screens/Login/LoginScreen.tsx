@@ -1,9 +1,10 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { useSharedValue } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
 import LoginBoxes from '@assets/illustrations/login-boxes.svg';
 import { AppText, PageDots, PillButton, Screen } from '@/components';
 import { useDesignInsets } from '@/hooks/useDesignInsets';
+import { useLoop } from '@/hooks/useLoop';
 import { type RootStackScreenProps } from '@/navigation/types';
 import { colors, layout } from '@/theme';
 import { moderateScale, scale } from '@/utils/scale';
@@ -14,10 +15,17 @@ import { LoginBackground } from './components/LoginBackground';
 const ILLUSTRATION = { x: 35, y: 135, width: 306, height: 236 };
 const FOOTER_GAP_TO_FRAME_BOTTOM = 48;
 const SUBTITLE_WIDTH = 304;
+const FLOAT_DURATION = 3200;
+const FLOAT_HEIGHT = scale(6);
 
 export function LoginScreen({ navigation }: RootStackScreenProps<'Login'>) {
   const { fromTop, fromBottom } = useDesignInsets();
   const activePage = useSharedValue(0);
+  const float = useLoop(FLOAT_DURATION);
+
+  const floatStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: -float.get() * FLOAT_HEIGHT }],
+  }));
 
   const enterApp = () =>
     navigation.replace('Main', { screen: 'HomeTab', params: { screen: 'Home' } });
@@ -25,12 +33,18 @@ export function LoginScreen({ navigation }: RootStackScreenProps<'Login'>) {
   return (
     <Screen background={colors.brand.yellow} edges={[]}>
       <LoginBackground />
-      <LoginBoxes
-        width={scale(ILLUSTRATION.width)}
-        height={scale(ILLUSTRATION.height)}
-        style={[styles.illustration, { left: scale(ILLUSTRATION.x), top: fromTop(ILLUSTRATION.y) }]}
+      <Animated.View
+        style={[
+          styles.illustration,
+          { left: scale(ILLUSTRATION.x), top: fromTop(ILLUSTRATION.y) },
+          floatStyle,
+        ]}
+        accessible
+        accessibilityRole="image"
         accessibilityLabel="Boxes ready for delivery"
-      />
+      >
+        <LoginBoxes width={scale(ILLUSTRATION.width)} height={scale(ILLUSTRATION.height)} />
+      </Animated.View>
       <View style={[styles.bottom, { paddingBottom: fromBottom(FOOTER_GAP_TO_FRAME_BOTTOM) }]}>
         <AppText
           variant="display"

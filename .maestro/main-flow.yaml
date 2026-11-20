@@ -1,0 +1,53 @@
+appId: com.opeyemiagbeja.breetdelivery
+name: Login to tracking detail
+---
+- launchApp:
+    clearState: true
+# A development build opens the Expo launcher first; point it at the local Metro server.
+- runFlow:
+    when:
+      notVisible: Welcome to E-Bikes
+    commands:
+      - extendedWaitUntil:
+          visible: Development servers
+          timeout: 30000
+      - openLink: exp+breet-delivery-app://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081&__expo_disable_onboarding=1&__expo_disable_fab=1
+      - tapOn:
+          text: Continue
+          optional: true
+      - tapOn:
+          text: Close
+          optional: true
+- extendedWaitUntil:
+    visible: Welcome to E-Bikes
+    timeout: 60000
+
+- tapOn: Login with Google
+- assertVisible: Hello good Morning!
+- swipe:
+    start: 80%, 35%
+    end: 20%, 35%
+    duration: 400
+- waitForAnimationToEnd
+
+- tapOn: Your Orders
+- assertVisible: Track Your Package
+- assertVisible: Tracking history
+
+- tapOn: Receipt number
+- inputText: SCP9374826473
+- tapOn: Track Now
+
+- assertVisible: Tracking Details
+- assertVisible: Receipt number SCP9374826473
+- assertVisible: 2h 40m
+- waitForAnimationToEnd
+
+- swipe:
+    start: 50%, 88%
+    end: 50%, 25%
+    duration: 500
+- waitForAnimationToEnd
+- assertVisible: History
+- assertVisible: 'No receipt : SCP9374826473'
+- assertVisible: Send Form Sukabumi
