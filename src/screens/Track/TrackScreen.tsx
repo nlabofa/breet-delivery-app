@@ -1,13 +1,16 @@
 import { useCallback } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
-import { HomeHeader, Screen } from '@/components';
+import { AppText, HomeHeader, Screen } from '@/components';
+import { shipments } from '@/data/shipments';
 import { currentUser } from '@/data/user';
 import { useDesignInsets } from '@/hooks/useDesignInsets';
 import { type HomeStackScreenProps } from '@/navigation/types';
 import { colors, layout } from '@/theme';
+import { type Shipment } from '@/types';
 import { scale } from '@/utils/scale';
 
+import { ShipmentRow } from './components/ShipmentRow';
 import { TrackPackageCard } from './components/TrackPackageCard';
 
 const HEADER_TOP = 40;
@@ -22,6 +25,11 @@ export function TrackScreen({ navigation }: HomeStackScreenProps<'Track'>) {
     [navigation],
   );
 
+  const openShipment = useCallback(
+    (shipment: Shipment) => openDetail(shipment.receipt),
+    [openDetail],
+  );
+
   return (
     <Screen background={colors.surface.white} edges={[]}>
       <ScrollView
@@ -33,6 +41,19 @@ export function TrackScreen({ navigation }: HomeStackScreenProps<'Track'>) {
         <HomeHeader avatar={currentUser.avatar} greeting={currentUser.greeting} />
         <View style={styles.card}>
           <TrackPackageCard onTrackPress={openDetail} />
+        </View>
+        <AppText
+          variant="section"
+          color={colors.ink.title}
+          accessibilityRole="header"
+          style={styles.historyTitle}
+        >
+          Tracking history
+        </AppText>
+        <View style={styles.history}>
+          {shipments.map((shipment) => (
+            <ShipmentRow key={shipment.id} shipment={shipment} onPress={openShipment} />
+          ))}
         </View>
       </ScrollView>
     </Screen>
@@ -46,5 +67,12 @@ const styles = StyleSheet.create({
   },
   card: {
     marginTop: scale(37),
+  },
+  historyTitle: {
+    marginTop: scale(40),
+  },
+  history: {
+    marginTop: scale(16),
+    gap: scale(24),
   },
 });
