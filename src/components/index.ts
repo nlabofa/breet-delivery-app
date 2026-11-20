@@ -6,3 +6,4 @@ export { PillButton, type PillButtonProps } from './PillButton';
 export { Screen, type ScreenProps } from './Screen';
 export { HomeHeader, type HomeHeaderProps } from './HomeHeader';
 export { TabBar } from './TabBar';
+export { EmojiBadge, type EmojiBadgeProps } from './EmojiBadge';
