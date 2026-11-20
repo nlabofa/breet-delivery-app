@@ -65,8 +65,10 @@ Or locally, without an Expo account:
 
 ```sh
 npx expo prebuild -p android --clean
-cd android && ./gradlew assembleRelease
+cd android && ./gradlew assembleRelease -PreactNativeArchitectures=armeabi-v7a,arm64-v8a
 ```
+
+The APK only includes ARM code, which covers real Android phones and Apple-silicon emulators. That halves its size; leave the flag off to add the x86 emulator builds.
 
 The local release build is signed with the debug keystore from the template. That is fine for installing a test APK, not for the Play Store.
 
