@@ -1,8 +1,10 @@
 <svg width="327" height="308" viewBox="0 0 327 308" fill="none" xmlns="http://www.w3.org/2000/svg">
-<mask id="mask0_107_25" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="327" height="308">
-<rect width="327" height="308" rx="32" fill="#FFD337"/>
-</mask>
-<g mask="url(#mask0_107_25)">
+<defs>
+<clipPath id="card">
+<rect width="327" height="308" rx="32"/>
+</clipPath>
+</defs>
+<g clip-path="url(#card)">
 <rect width="327" height="308" rx="32" fill="#FFD337"/>
 <path d="M195 -37L209.377 4.29687C215.079 20.673 228.568 33.1297 245.345 37.5118L257.403 40.6611C274.865 45.2222 288.713 58.5117 293.99 75.7713L303.751 107.702C310.435 129.566 330.616 144.5 353.479 144.5H382" stroke-width="2" stroke="white"/>
 <path d="M211 -37L225.377 4.29687C231.079 20.673 244.568 33.1297 261.345 37.5118L273.403 40.6611C290.865 45.2222 304.713 58.5117 309.99 75.7713L319.751 107.702C326.435 129.566 346.616 144.5 369.479 144.5H398" stroke-width="2" stroke="white"/>
