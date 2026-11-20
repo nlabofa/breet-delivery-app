@@ -79,7 +79,7 @@ src/
 - **Layout scales from the 375pt frame width.** `scale()` sizes layout, `moderateScale()` sizes text so it grows more gently on big phones. `useDesignInsets` maps Figma's assumed 44pt status bar and 34pt home indicator onto the real device insets, so the same y-positions work on any Android phone.
 - **Fonts are embedded**: Inter, plus Lato 2.0 SemiBold for the "Your Orders" and "Track Now" labels, which is what the design uses there. Both are OFL.
 - **Emoji are images.** The design uses Apple emoji; Android would draw Google's instead, so the three emoji ship as PNGs exported from Figma.
-- **The map is the vector map from the design**, with the route drawn on top. A live map would need an API key and would never look like the design.
+- **The map is the vector map from the design**, with the route drawn on top. A live map would need an API key and would never look like the design. On open, the route draws from pickup to destination with a light running along its head, then the destination halo pulses. It settles on the exact Figma frame, and with Reduce Motion on it shows that frame straight away.
 - **The bottom sheet is @gorhom/bottom-sheet.** It already solves dragging into an inner scroll view and velocity snapping. The snap points come from the two Figma frames, the backdrop fades in with the drag, and the map shifts up as the sheet opens, which is what the expanded frame shows.
 - **Strings are copied verbatim**, including "Send Form Sukabumi", "No receipt :" and "2,50 USD".
 - **The three tabs without designs do nothing when tapped**, and "Sign Up" goes to the same place as "Login with Google", since neither has a screen in the file.

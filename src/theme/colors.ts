@@ -33,6 +33,11 @@ export const colors = {
     inactive: '#E5F0FC',
     inactiveOnYellow: '#FFFFFF',
   },
+  route: {
+    line: '#FFD337',
+    marker: '#051F32',
+    comet: '#FFFFFF',
+  },
   icon: {
     tabActive: '#031420',
     tabInactive: '#BBBFD0',
