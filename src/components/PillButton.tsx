@@ -1,11 +1,12 @@
 import { type ReactNode } from 'react';
-import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { colors, radii, sizes, type TypographyVariant } from '@/theme';
 
 import { scale } from '@/utils/scale';
 
 import { AppText } from './AppText';
+import { PressableScale } from './PressableScale';
 
 export type PillButtonProps = {
   label: string;
@@ -35,16 +36,11 @@ export function PillButton({
   const centered = labelAlign === 'center';
 
   return (
-    <Pressable
+    <PressableScale
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? label}
-      style={({ pressed }) => [
-        styles.container,
-        { paddingStart, paddingEnd },
-        pressed && styles.pressed,
-        style,
-      ]}
+      style={[styles.container, { paddingStart, paddingEnd }, style]}
     >
       {leading ? <View style={centered ? styles.leadingOverlay : undefined}>{leading}</View> : null}
       <AppText
@@ -56,7 +52,7 @@ export function PillButton({
         {label}
       </AppText>
       {trailing}
-    </Pressable>
+    </PressableScale>
   );
 }
 
@@ -67,9 +63,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.ink.black,
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  pressed: {
-    opacity: 0.85,
   },
   leadingOverlay: {
     position: 'absolute',

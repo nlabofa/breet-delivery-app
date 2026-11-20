@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import ChevronRight from '@assets/icons/chevron-right.svg';
-import { AppText, EmojiBadge } from '@/components';
+import { AppText, EmojiBadge, PressableScale } from '@/components';
 import { colors, sizes } from '@/theme';
 import { type Shipment } from '@/types';
 import { scale } from '@/utils/scale';
@@ -14,11 +14,12 @@ export type ShipmentRowProps = {
 
 export const ShipmentRow = memo(function ShipmentRow({ shipment, onPress }: ShipmentRowProps) {
   return (
-    <Pressable
+    <PressableScale
       onPress={() => onPress(shipment)}
+      pressedScale={0.98}
       accessibilityRole="button"
       accessibilityLabel={`${shipment.receipt}, ${shipment.status}`}
-      style={({ pressed }) => [styles.row, pressed && styles.pressed]}
+      style={styles.row}
     >
       <EmojiBadge source={shipment.emoji} />
       <View style={styles.text}>
@@ -30,7 +31,7 @@ export const ShipmentRow = memo(function ShipmentRow({ shipment, onPress }: Ship
         </AppText>
       </View>
       <ChevronRight {...sizes.chevron} color={colors.ink.body} style={styles.chevron} />
-    </Pressable>
+    </PressableScale>
   );
 });
 
@@ -38,9 +39,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  pressed: {
-    opacity: 0.7,
   },
   text: {
     flex: 1,
